@@ -27,6 +27,7 @@ public class Menu extends javax.swing.JFrame {
         stopbtn = new javax.swing.JButton();
         pausebtn = new javax.swing.JButton();
         title = new javax.swing.JLabel();
+        volume = new javax.swing.JSlider();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Player");
@@ -67,6 +68,18 @@ public class Menu extends javax.swing.JFrame {
         title.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         title.setFocusable(false);
 
+        volume.setMajorTickSpacing(2);
+        volume.setMinorTickSpacing(1);
+        volume.setOrientation(javax.swing.JSlider.VERTICAL);
+        volume.setPaintTicks(true);
+        volume.setSnapToTicks(true);
+        volume.setValue(100);
+        volume.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                volumeStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -84,21 +97,26 @@ public class Menu extends javax.swing.JFrame {
                         .addComponent(stopbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(pausebtn, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(77, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(volume, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(55, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(46, 46, 46)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(file, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(title, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(playbtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pausebtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(stopbtn))
-                .addContainerGap(51, Short.MAX_VALUE))
+                    .addComponent(volume, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(file, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(title, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(playbtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(pausebtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(stopbtn))))
+                .addContainerGap(46, Short.MAX_VALUE))
         );
 
         pack();
@@ -112,6 +130,7 @@ public class Menu extends javax.swing.JFrame {
         }
         p.setMedia(Choose.getSelectedFile());
         title.setText(Choose.getSelectedFile().getName());
+        p.play();
     }//GEN-LAST:event_fileActionPerformed
 
     private void playbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playbtnActionPerformed
@@ -144,6 +163,22 @@ public class Menu extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_pausebtnActionPerformed
 
+    private void volumeStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_volumeStateChanged
+        try {
+            Double vol;
+            if (volume.getValue() == 100) {
+                vol = 1.0;
+            } else if (volume.getValue() > 10) {
+                vol = Double.parseDouble("0." + volume.getValue());
+            } else {
+                vol = Double.parseDouble("0.0" + volume.getValue());
+            }
+            p.getMedia().setVolume(vol);
+        } catch (java.lang.NullPointerException ex) {
+            volume.setValue(100);
+        }
+    }//GEN-LAST:event_volumeStateChanged
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JFileChooser Choose;
     private javax.swing.JButton file;
@@ -151,5 +186,6 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JButton playbtn;
     private javax.swing.JButton stopbtn;
     private javax.swing.JLabel title;
+    private javax.swing.JSlider volume;
     // End of variables declaration//GEN-END:variables
 }

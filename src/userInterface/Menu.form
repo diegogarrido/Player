@@ -45,7 +45,9 @@
                       <Component id="pausebtn" min="-2" pref="73" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="77" max="32767" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="volume" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="55" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -54,16 +56,21 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="46" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="file" max="32767" attributes="0"/>
-                  <Component id="title" min="-2" pref="23" max="-2" attributes="0"/>
+                  <Component id="volume" pref="0" max="32767" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="file" max="32767" attributes="0"/>
+                          <Component id="title" min="-2" pref="23" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="playbtn" max="32767" attributes="0"/>
+                          <Component id="pausebtn" max="32767" attributes="0"/>
+                          <Component id="stopbtn" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
               </Group>
-              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="playbtn" max="32767" attributes="0"/>
-                  <Component id="pausebtn" max="32767" attributes="0"/>
-                  <Component id="stopbtn" alignment="0" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace pref="51" max="32767" attributes="0"/>
+              <EmptySpace pref="46" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -126,6 +133,19 @@
         </Property>
         <Property name="focusable" type="boolean" value="false"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JSlider" name="volume">
+      <Properties>
+        <Property name="majorTickSpacing" type="int" value="2"/>
+        <Property name="minorTickSpacing" type="int" value="1"/>
+        <Property name="orientation" type="int" value="1"/>
+        <Property name="paintTicks" type="boolean" value="true"/>
+        <Property name="snapToTicks" type="boolean" value="true"/>
+        <Property name="value" type="int" value="100"/>
+      </Properties>
+      <Events>
+        <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="volumeStateChanged"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
