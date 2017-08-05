@@ -87,6 +87,7 @@ public class Menu extends javax.swing.JFrame {
         });
 
         timebar.setValue(0);
+        timebar.setVerifyInputWhenFocusTarget(false);
         timebar.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 timebarStateChanged(evt);
@@ -221,6 +222,8 @@ public class Menu extends javax.swing.JFrame {
 
     private void timebarStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_timebarStateChanged
         this.p.getMedia().seek(Duration.seconds(timebar.getValue()));
+        int min = timebar.getValue()/60;
+        time.setText(min+":"+(timebar.getValue()-(min*60)));
     }//GEN-LAST:event_timebarStateChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
