@@ -148,7 +148,7 @@ public class Menu extends javax.swing.JFrame {
     private void fileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileActionPerformed
         p = null;
         p = new Play();
-        Choose.setCurrentDirectory(new File("C:/Users/Diego/Music/"));
+        //Choose.setCurrentDirectory(new File("C:/Users/Diego/Music/"));
         Choose.showOpenDialog(this);
         if (isPlaying) {
             this.p.stop();
