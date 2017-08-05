@@ -4,21 +4,27 @@
 package userInterface;
 
 import java.io.File;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.util.Duration;
+import player.Data;
 import player.Play;
 
 public class Menu extends javax.swing.JFrame {
 
     Play p;
+    Data d;
     boolean isPlaying;
 
     public Menu() {
         initComponents();
         this.p = new Play();
+        this.d = new Data();
         this.setLocationRelativeTo(null);
         isPlaying = false;
+        try {
+            Choose.setCurrentDirectory(new File(d.loadData()[0]));
+            System.out.println(d.loadData()[0]);
+        } catch (Exception e) {
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -148,27 +154,30 @@ public class Menu extends javax.swing.JFrame {
     private void fileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileActionPerformed
         p = null;
         p = new Play();
-        //Choose.setCurrentDirectory(new File("C:/Users/Diego/Music/"));
         Choose.showOpenDialog(this);
         if (isPlaying) {
             this.p.stop();
             isPlaying = false;
         }
-        this.p.setMedia(Choose.getSelectedFile());
-        title.setText(Choose.getSelectedFile().getName());
-        this.p.play();
-        new Thread() {
-            {
-                while (p.getMedia().getTotalDuration().toString().equals("UNKNOWN")) {
-                    System.out.println("");
+        try {
+            this.p.setMedia(Choose.getSelectedFile());
+            title.setText(Choose.getSelectedFile().getName());
+            d.saveData("" + Choose.getCurrentDirectory());
+            this.p.play();
+            new Thread() {
+                {
+                    while (p.getMedia().getTotalDuration().toString().equals("UNKNOWN")) {
+                        System.out.println("");
+                    }
+                    int min = (int) p.getMedia().getTotalDuration().toMinutes();
+                    int sec = (int) p.getMedia().getTotalDuration().toSeconds();
+                    timebar.setMaximum(sec);
+                    time.setText("0:0");
+                    //add live-timebar
                 }
-                int min = (int) p.getMedia().getTotalDuration().toMinutes();
-                int sec = (int) p.getMedia().getTotalDuration().toSeconds();
-                timebar.setMaximum(sec);
-                time.setText("0:0");
-                //add live-timebar
-            }
-        };
+            };
+        } catch (Exception e) {
+        }
         /*
         timebar.setMaximum(Integer.parseInt("" + );
         count();*/
@@ -222,8 +231,8 @@ public class Menu extends javax.swing.JFrame {
 
     private void timebarStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_timebarStateChanged
         this.p.getMedia().seek(Duration.seconds(timebar.getValue()));
-        int min = timebar.getValue()/60;
-        time.setText(min+":"+(timebar.getValue()-(min*60)));
+        int min = timebar.getValue() / 60;
+        time.setText(min + ":" + (timebar.getValue() - (min * 60)));
     }//GEN-LAST:event_timebarStateChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
