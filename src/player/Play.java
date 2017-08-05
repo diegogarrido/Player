@@ -8,16 +8,24 @@ import javafx.scene.media.MediaPlayer;
 /**
  * @author Diego
  */
-public class Play {
+public final class Play {
 
     MediaPlayer media;
     double duration;
 
     /**
-     *  Ejecutar la aplicación para reproducir audio.
+     * Ejecutar la aplicación para reproducir audio.
      */
     public Play() {
         JFXPanel panel = new JFXPanel();
+    }
+
+    public double getDuration() {
+        return duration;
+    }
+
+    public void setDuration(double duration) {
+        this.duration = duration;
     }
 
     /**
@@ -32,7 +40,12 @@ public class Play {
      */
     public void setMedia(String route) {
         this.media = new MediaPlayer(new Media(route));
-        this.duration = this.media.getTotalDuration().toSeconds();
+        this.media.setOnReady(new Runnable() {
+            @Override
+            public void run() {
+                duration = media.getMedia().getDuration().toSeconds();
+            }
+        });
     }
 
     /**
@@ -40,7 +53,13 @@ public class Play {
      */
     public void setMedia(File file) {
         this.media = new MediaPlayer(new Media(file.toURI().toString()));
-        this.duration = this.media.getTotalDuration().toSeconds();
+        this.media.setOnReady(new Runnable() {
+            @Override
+            public void run() {
+                duration = media.getMedia().getDuration().toSeconds();
+            }
+        });
+        
     }
 
     /**

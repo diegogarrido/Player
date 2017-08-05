@@ -44,9 +44,13 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="pausebtn" min="-2" pref="73" max="-2" attributes="0"/>
                   </Group>
+                  <Component id="timebar" max="32767" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="volume" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="volume" min="-2" max="-2" attributes="0"/>
+                  <Component id="time" min="-2" max="-2" attributes="0"/>
+              </Group>
               <EmptySpace pref="55" max="32767" attributes="0"/>
           </Group>
       </Group>
@@ -70,7 +74,12 @@
                       </Group>
                   </Group>
               </Group>
-              <EmptySpace pref="46" max="32767" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="time" max="32767" attributes="0"/>
+                  <Component id="timebar" max="32767" attributes="0"/>
+              </Group>
+              <EmptySpace pref="16" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -146,6 +155,19 @@
       <Events>
         <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="volumeStateChanged"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JSlider" name="timebar">
+      <Properties>
+        <Property name="value" type="int" value="0"/>
+      </Properties>
+      <Events>
+        <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="timebarStateChanged"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="time">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="00:00"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>

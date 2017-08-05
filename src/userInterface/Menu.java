@@ -3,6 +3,10 @@
  */
 package userInterface;
 
+import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.util.Duration;
 import player.Play;
 
 public class Menu extends javax.swing.JFrame {
@@ -12,7 +16,7 @@ public class Menu extends javax.swing.JFrame {
 
     public Menu() {
         initComponents();
-        p = new Play();
+        this.p = new Play();
         this.setLocationRelativeTo(null);
         isPlaying = false;
     }
@@ -28,6 +32,8 @@ public class Menu extends javax.swing.JFrame {
         pausebtn = new javax.swing.JButton();
         title = new javax.swing.JLabel();
         volume = new javax.swing.JSlider();
+        timebar = new javax.swing.JSlider();
+        time = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Player");
@@ -80,6 +86,15 @@ public class Menu extends javax.swing.JFrame {
             }
         });
 
+        timebar.setValue(0);
+        timebar.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                timebarStateChanged(evt);
+            }
+        });
+
+        time.setText("00:00");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -96,9 +111,12 @@ public class Menu extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(stopbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(pausebtn, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(pausebtn, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(timebar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(volume, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(volume, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(time))
                 .addContainerGap(55, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -116,27 +134,49 @@ public class Menu extends javax.swing.JFrame {
                             .addComponent(playbtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(pausebtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(stopbtn))))
-                .addContainerGap(46, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(time, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(timebar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void fileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileActionPerformed
+        p = null;
+        p = new Play();
+        Choose.setCurrentDirectory(new File("C:/Users/Diego/Music/"));
         Choose.showOpenDialog(this);
         if (isPlaying) {
-            p.stop();
+            this.p.stop();
             isPlaying = false;
         }
-        p.setMedia(Choose.getSelectedFile());
+        this.p.setMedia(Choose.getSelectedFile());
         title.setText(Choose.getSelectedFile().getName());
-        p.play();
+        this.p.play();
+        new Thread() {
+            {
+                while (p.getMedia().getTotalDuration().toString().equals("UNKNOWN")) {
+                    System.out.println("");
+                }
+                int min = (int) p.getMedia().getTotalDuration().toMinutes();
+                int sec = (int) p.getMedia().getTotalDuration().toSeconds();
+                timebar.setMaximum(sec);
+                time.setText("0:0");
+                //add live-timebar
+            }
+        };
+        /*
+        timebar.setMaximum(Integer.parseInt("" + );
+        count();*/
     }//GEN-LAST:event_fileActionPerformed
 
     private void playbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playbtnActionPerformed
         try {
             if (!isPlaying) {
-                p.play();
+                this.p.play();
                 isPlaying = true;
             }
         } catch (java.lang.NullPointerException e) {
@@ -146,7 +186,7 @@ public class Menu extends javax.swing.JFrame {
 
     private void stopbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopbtnActionPerformed
         try {
-            p.stop();
+            this.p.stop();
         } catch (java.lang.NullPointerException e) {
             fileActionPerformed(evt);
         }
@@ -155,7 +195,7 @@ public class Menu extends javax.swing.JFrame {
     private void pausebtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pausebtnActionPerformed
         try {
             if (isPlaying) {
-                p.pause();
+                this.p.pause();
                 isPlaying = false;
             }
         } catch (java.lang.NullPointerException e) {
@@ -173,11 +213,15 @@ public class Menu extends javax.swing.JFrame {
             } else {
                 vol = Double.parseDouble("0.0" + volume.getValue());
             }
-            p.getMedia().setVolume(vol);
+            this.p.getMedia().setVolume(vol);
         } catch (java.lang.NullPointerException ex) {
             volume.setValue(100);
         }
     }//GEN-LAST:event_volumeStateChanged
+
+    private void timebarStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_timebarStateChanged
+        this.p.getMedia().seek(Duration.seconds(timebar.getValue()));
+    }//GEN-LAST:event_timebarStateChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JFileChooser Choose;
@@ -185,6 +229,8 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JButton pausebtn;
     private javax.swing.JButton playbtn;
     private javax.swing.JButton stopbtn;
+    private javax.swing.JLabel time;
+    private javax.swing.JSlider timebar;
     private javax.swing.JLabel title;
     private javax.swing.JSlider volume;
     // End of variables declaration//GEN-END:variables
