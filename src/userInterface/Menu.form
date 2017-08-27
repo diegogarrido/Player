@@ -162,7 +162,7 @@
         <Property name="verifyInputWhenFocusTarget" type="boolean" value="false"/>
       </Properties>
       <Events>
-        <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="timebarStateChanged"/>
+        <EventHandler event="mouseDragged" listener="java.awt.event.MouseMotionListener" parameters="java.awt.event.MouseEvent" handler="timebarMouseDragged"/>
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="time">

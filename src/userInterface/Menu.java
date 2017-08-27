@@ -5,6 +5,7 @@ package userInterface;
 
 import java.io.File;
 import javafx.util.Duration;
+import player.Count;
 import player.Data;
 import player.Play;
 
@@ -22,7 +23,6 @@ public class Menu extends javax.swing.JFrame {
         isPlaying = false;
         try {
             Choose.setCurrentDirectory(new File(d.loadData()[0]));
-            System.out.println(d.loadData()[0]);
         } catch (Exception e) {
         }
     }
@@ -94,9 +94,9 @@ public class Menu extends javax.swing.JFrame {
 
         timebar.setValue(0);
         timebar.setVerifyInputWhenFocusTarget(false);
-        timebar.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                timebarStateChanged(evt);
+        timebar.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                timebarMouseDragged(evt);
             }
         });
 
@@ -166,21 +166,20 @@ public class Menu extends javax.swing.JFrame {
             this.p.play();
             new Thread() {
                 {
+                    this.setPriority(MIN_PRIORITY);
                     while (p.getMedia().getTotalDuration().toString().equals("UNKNOWN")) {
                         System.out.println("");
                     }
-                    int min = (int) p.getMedia().getTotalDuration().toMinutes();
+                    //int min = (int) p.getMedia().getTotalDuration().toMinutes();
                     int sec = (int) p.getMedia().getTotalDuration().toSeconds();
                     timebar.setMaximum(sec);
                     time.setText("0:0");
                     //add live-timebar
+                    
                 }
             };
         } catch (Exception e) {
         }
-        /*
-        timebar.setMaximum(Integer.parseInt("" + );
-        count();*/
     }//GEN-LAST:event_fileActionPerformed
 
     private void playbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playbtnActionPerformed
@@ -229,11 +228,14 @@ public class Menu extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_volumeStateChanged
 
-    private void timebarStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_timebarStateChanged
-        this.p.getMedia().seek(Duration.seconds(timebar.getValue()));
-        int min = timebar.getValue() / 60;
-        time.setText(min + ":" + (timebar.getValue() - (min * 60)));
-    }//GEN-LAST:event_timebarStateChanged
+    private void timebarMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_timebarMouseDragged
+        try {
+            this.p.getMedia().seek(Duration.seconds(timebar.getValue()));
+            int min = timebar.getValue() / 60;
+            time.setText(min + ":" + (timebar.getValue() - (min * 60)));
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_timebarMouseDragged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JFileChooser Choose;
